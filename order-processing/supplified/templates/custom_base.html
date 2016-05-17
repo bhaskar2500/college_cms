@@ -1,0 +1,41 @@
+{% extends "admin/index.html" %}
+
+{% block extrahead %}
+  {% block js %}
+  {% endblock %}
+
+{% endblock %}
+
+{% block extrastyle %}
+<style>
+.progress {position: relative;width: 400px;border: 1px solid #ddd;padding: 1px;border-radius: 3px;display: none;}
+.progress {height: 20px;margin-bottom: 20px;overflow: hidden;background-color: #f5f5f5;border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+.progress-bar { float: left;width: 0;height: 100%;font-size: 12px;line-height: 20px;color: #fff;text-align: center;
+    background-color: #337ab7;-webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    -webkit-transition: width .6s ease;-o-transition: width .6s ease;transition: width .6s ease;}
+.bar{background-color: #B4F5B4;width: 0%;height: 20px;border-radius: 3px;}
+.percent {position: absolute;display: inline-block;top: 3px;left: 48%;}
+.table-primary>tbody>tr>td, .table-primary>tbody>tr>th{white-space: nowrap;max-width: 200px;text-overflow: ellipsis;overflow: hidden;}
+.results{overflow:auto; max-height: 400px;}
+.action_btns{display: none;margin-top: -23px;position: relative;top: -12px;}
+.uploadform{border-bottom: 1px solid #d0d0d0;margin-top: 20px; margin-bottom: 10px;padding-bottom: 10px;}
+td.errors{ white-space: normal !important; min-width: 200px;background-color: #FFCCCC !important;}
+.process_stats{padding: 7px;background: #fff;margin: 10px 0px; font-weight: bold; display: none;}
+.text-danger{color: #a94442;}
+.text-success{color: green;}
+.text-warning{color: #E49000;}
+</style>
+  {% block cstyle %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  {% block body %}
+  {% endblock %}
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block footer %}{% endblock %}

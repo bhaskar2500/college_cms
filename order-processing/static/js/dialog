@@ -1,0 +1,28 @@
+ bootbox.dialog 
+    ({
+      title: "This is a form in a modal.",
+      message: '<div class="modal" id="modal-start">' +
+     '<div class="modal-header">' +
+       '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
+       '<h3 class="title"></h3>' +
+     '</div>' +
+     '<div class="modal-body">' +
+     '<div>'+
+    '<label> <input type="checkbox" name="message" id="user_sms" value="sms"> Sms</label> ' +
+    '<label> <input type="checkbox" name="message" id="user_email" value="email"> Email</label> '+
+   '</div>',
+   buttons:
+{
+    success:
+  {
+    label:"Save",
+    callback:function()
+    {
+   message = $("input[name='message']:checked").val();
+   console.log(message);
+    }
+  }
+
+}
+
+   }); 

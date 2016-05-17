@@ -1,0 +1,46 @@
+from django.conf.urls import patterns, include, url
+from django.contrib import admin
+import settings
+admin.autodiscover()
+from django.shortcuts import render
+
+urlpatterns = patterns('',
+    # Examples:
+    # url(r'^$', 'supplified_admin.views.home', name='home'),
+    # url(r'^blog/', include('blog.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^admin/view/product$', 'Products.views.product_import_page'),
+    url(r'^admin/view/product/download$', 'Products.views.export_as_excel'),
+    # bulk operation individual template url
+    url(r'^admin/bulk/product$', 'Products.views.product_bulk_page'),
+    url(r'^admin/bulk/price$', 'Stores.views.store_bulk_update'),
+    url(r'^admin/bulk/media$', 'Products.bulk_image.product_bulk_image_page'),
+    url(r'^admin/bulk/mediazip$', 'Products.bulk_image.bulk_zip_upload_page'),
+    url(r'^admin/bulk/template$', 'Products.bulk_template.product_bulk_template'),
+    # orders
+    url(r'^admin/orders/change_status$', 'Orders.orders_views.change_order_status'),
+    url(r'^admin/orders/get_check$', 'Orders.orders_views.get_check'),
+        url(r'^admin/orders/remarks/$', 'Orders.orders_views.remarks'),
+        url(r'^admin/view/', 'Orders.orders_views.overview'),
+
+        url(r'^admin/orders/as_excel/','Orders.orders_views.download_query_data'),
+
+
+		
+
+   
+    # url(r'^admin/orders/$', 'Orders.admin.DeliveryLineAdmin.get_queryset'),
+    # common urls
+    url(r'^admin/upload$', 'supplified.views.upload'),
+    url(r'^admin/upload_zip$', 'supplified.views.upload_zip'),
+    url(r'^admin/process$', 'supplified.views.process'),
+    url(r'^admin/process_zip$', 'supplified.views.process_zip'),    
+    url(r'^admin/apply$', 'supplified.views.apply_query_req'),
+    url(r'^admin/apply_on_production$', 'supplified.views.apply_query_to_production_req'),
+    url(r'^admin/discard$', 'supplified.views.discard_query_req'),
+
+    url(r'^admin/create_query$', 'supplified.views.create_query_req'),
+    url(r'^admin/download_data$', 'supplified.views.download_query_data'),
+    url(r'^admin/download_file$', 'supplified.views.download_uploaded_file'),
+)

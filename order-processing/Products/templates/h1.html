@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		table a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+table a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+table a:active,
+table a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}
+table {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#000000;
+	font-size:12px;
+	text-shadow: 1px 1px 0px #fff;
+	background:#eaebec;
+	margin:20px;
+	border:#ccc 1px solid;
+
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+
+	-moz-box-shadow: 0 1px 2px #d1d1d1;
+	-webkit-box-shadow: 0 1px 2px #d1d1d1;
+	box-shadow: 0 1px 2px #d1d1d1;
+}
+table th {
+	padding:21px 25px 22px 25px;
+	border-top:1px solid #fafafa;
+	border-bottom:1px solid #e0e0e0;
+
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+table th:first-child {
+	text-align: left;
+	padding-left:20px;
+}
+table tr:first-child th:first-child {
+	-moz-border-radius-topleft:3px;
+	-webkit-border-top-left-radius:3px;
+	border-top-left-radius:3px;
+}
+table tr:first-child th:last-child {
+	-moz-border-radius-topright:3px;
+	-webkit-border-top-right-radius:3px;
+	border-top-right-radius:3px;
+}
+table tr {
+	text-align: center;
+	padding-left:20px;
+}
+table td:first-child {
+	text-align: left;
+	padding-left:20px;
+	border-left: 0;
+}
+table td {
+	padding:3px;
+	border-top: 1px solid #ffffff;
+	border-bottom:1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
+
+	background: #fafafa;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+}
+table tr.even td {
+	background: #f6f6f6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+	background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+}
+table tr:last-child td {
+	border-bottom:0;
+}
+table tr:last-child td:first-child {
+	-moz-border-radius-bottomleft:3px;
+	-webkit-border-bottom-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+table tr:last-child td:last-child {
+	-moz-border-radius-bottomright:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+table tr:hover td {
+	background: #f2f2f2;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+	}
+	</style>
+</head>
+<p style="margin:0px;">Order Header No.<h4 style="margin:0px;" >{{ order_id }}</h4></p>
+
+
+<table><thead><tr><th>Order Detail</th><th>Billing Address</th><th>Shippping Address</th></tr></thead> <tbody>
+<tr>
+
+	<td>
+	<table>
+		<tr><td>Date:</td> <td> {{ oh.created_date }}</td>
+		</tr>
+
+		<tr>
+		<td>Amount:</td><td> {{ each.unit_price }}</td>
+		</tr>
+		<tr>
+
+		<td>Tax: </td><td>{{ oh.tax }}</td>
+		</tr>
+		<tr><td>Shipping:</td><td>{{  oh.shipping_charges }}</td>
+		</tr>
+		<tr>
+		<td>Total</td><td>{{ each.total }}</td>
+		</tr>
+		<tr>
+		<td>Payment Status</td><td>{{ oh.status }}</td>
+		</tr>
+	</table>
+
+	</td>
+
+
+		<td>
+	<table>
+		<tr><td>Name:</td> <td> {{ oh.billing_name }}</td>
+		</tr>
+
+		<tr>
+		<td>Email:</td><td> {{ oh.user_email }}</td>
+		</tr>
+		<tr>
+
+		<td>Address: </td><td>{{ oh.billing_address }}</td>
+		</tr>
+		<tr><td>City:</td><td>{{  oh.billing_City }}</td>
+		</tr>
+		<tr>
+		<td>State:</td><td>{{ oh.billing_state }}</td>
+		</tr>
+		<tr>
+		<td>Pincode</td><td>{{ oh.billing_pincode }}</td>
+		</tr>
+		<tr>
+		<td>Country</td><td>Country </td>
+		</tr>
+		<tr>
+		<td>Mobile</td><td>{{ oh.user_phone_no }}</td>
+		</tr>
+
+	</table>
+
+	</td>
+	<td>
+	<table>
+		<tr><td>Name:</td> <td> {{ oh.shipping_name }}</td>
+		</tr>
+
+		<tr>
+		<td>Email:</td><td> {{ each.shipping_email }}</td>
+		</tr>
+		<tr>
+
+		<td>Address: </td><td>{{ oh.shipping_address }}</td>
+		</tr>
+		<tr><td>City:</td><td>{{  oh.shipping_city }}</td>
+		</tr>
+		<tr>
+		<td>State:</td><td>{{ oh.shipping_state }}</td>
+		</tr>
+		<tr>
+		<td>Pincode</td><td>{{ oh.shipping_pincode }}</td>
+		</tr>
+		<tr>
+		<td>Country</td><td>Country</td>
+		</tr>
+		<tr>
+		<td>Mobile</td><td>{{ oh.user_phone_no }}</td>
+		</tr>
+		</table>
+		</td>
+</tr>
+
+
+
+</tr>
+<tr>
+<thead><th>Item Detail</th><th>Category Detail</th><th>Vendor Detail</th> </thead>
+</tr>
+{%for  each in orderline %}
+
+<tr>
+
+	<td>
+		<table>
+			<tr><td>Order Sub_id:</td> <td> {{ each.order_line_id }}</td>
+			</tr>
+
+			<tr>
+			<td>Title:</td><td> {{ each.product_title }}</td>
+			</tr>
+			<tr>
+
+			<td>SKU	: </td><td>{{ each.SKU_code }}</td>
+			</tr>
+			<tr><td>Brand:</td><td> Brand</td>
+			</tr>
+			<tr>
+			<td>Modal No.:</td><td> Modal No.</td>
+			</tr>
+			<tr>
+			<td>DelhiveryId</td><td>DelhiveryId</td>
+			</tr>
+			<tr>
+			<td>Payment Status</td><td>{{ oh.payment_status }}</td>
+			</tr>
+		</table>
+	</td>
+		<td>
+		<table>
+			<tr><td>Category:</td> <td> {{ each.order_line_id }}</td>
+			</tr>
+
+			<tr>
+			<td>Quantity:</td><td> {{ each.product_qty }}</td>
+			</tr>
+			<tr>
+
+			<td>Shipping: </td><td>{{ oh.payment_type }}</td>
+			</tr>
+			<tr><td>Tax:</td><td>{{  each.tax }}</td>
+			</tr>
+			<tr>
+			<td>Store Price:</td><td>{{ each.unit_price }}</td>
+			</tr>
+		
+		</table>
+	</td>
+		<td>
+		<table>
+			<tr><td>Vendor Name:</td> <td> {{ each.store_name }}</td>
+			</tr>
+
+			<tr>
+			<td>Vendor Id:</td><td> {{ each.store_id }}</td>
+			</tr>
+			<tr>
+
+			<td>Mobile No.: </td><td>{{ each.seller_phone }}</td>
+			</tr>
+			<tr><td>Unit Cost:</td><td>{{  each.unit_price }}</td>
+			</tr>
+			<tr>
+			<td>Contact No.:</td><td>{{ each.seller_phone }}</td>
+			</tr>
+			<tr>
+			<td>Contact Name:</td><td>{{ each.seller_name }}</td>
+			</tr>
+			<tr>
+			<td>Contact Mobile:</td><td>{{ oh.seller_no }}</td>
+			</tr>
+			<tr>
+			<td>Contact email:</td><td>{{ oh.seller_email }}</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+
+
+
+
+
+{% endfor %}
+
+
+
+
+
+</tr>
+</tbody></table>
+
+
+
+<body>
+
+</body>
+</html>

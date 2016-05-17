@@ -1,0 +1,136 @@
+@media print,screen {
+.product-detail-table {
+    border-collapse:collapse;
+    font-size: 10px;
+    table-layout: fixed;
+    width: 680px;
+}
+.product-detail-table td {
+    width: 50px;
+    height: 100%;
+    padding: 2px;
+    margin:2px;
+    word-wrap: break-word;
+
+}
+.product-detail-table td:nth-child(1), 
+.product-detail-table td:nth-child(5), 
+.product-detail-table td:nth-child(6), 
+.product-detail-table td:nth-child(7), 
+.product-detail-table td:nth-child(9), 
+.product-detail-table td:nth-child(10){
+    width: 7%;
+} 
+.product-detail-table td:nth-child(2), 
+.product-detail-table td:nth-child(4), 
+.product-detail-table td:nth-child(8), 
+.product-detail-table td:nth-child(11){
+    width:9%; 
+} 
+.product-detail-table td:nth-child(3) {
+    width:22%;
+}
+.purchase{
+    background:blue; 
+    color:#ffffff; 
+    text-align:center; 
+    display:block;
+    width:auto;
+    margin-top:5px;
+
+}
+.image_manor{
+
+    width:40%;
+    display:inline-block;
+
+}
+.manor_add{
+
+ display: inline-block;
+    position: absolute;
+    right: 40pt;
+    top: 0;
+
+   
+}
+.wrap_sup_bill{
+
+    position:relative;
+    margin:5px;
+    display:block; 
+
+}
+.wrapper_manor {
+
+   display: block;
+    position: relative;
+    width: 100%;
+    outline:2pt solid black;
+}
+.supplier_details{
+    background:blue; 
+    color:#ffffff; 
+    text-align:left; 
+    vertical-align: middle;
+    
+}
+.supplier{
+    width:100%;
+    display: inline-block;
+}
+.bill_wrap
+{   display: inline-block;
+    right: 0;
+    width: auto;
+    
+}
+.po_details
+{
+
+    display:inline-block;
+    width:50%;
+}
+.pick_up
+{
+    display:inline-block;
+    width:40%;
+    right:0px;
+    position:absolute;
+}
+table.manor_table tbody
+{
+    display:block;
+    outline:2pt solid black;
+    -pdf-outline:true;
+}
+table.wrap_sup_bill tbody
+{
+
+    display: block;
+}
+.manor_table
+{
+    outline: 2pt solid black;
+    display: block;
+}
+.orders
+{
+     background-color:blue;
+     text-align:center;
+     color:white;
+}
+
+div.para-term
+{
+     font-size:10px;
+     font-family:sans-serif;
+}
+
+@page {size:'A4';}    
+
+}
+
+    /* change the margins as you want them to be. 
+
+*/

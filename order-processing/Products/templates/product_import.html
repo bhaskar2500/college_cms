@@ -1,0 +1,65 @@
+{% extends "custom_base.html" %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $('select[name="category"] option[value="{{selected_category_id}}"]').prop('selected', true)
+  });
+</script>
+{% endblock %}
+
+{% block cstyle %}
+<style>
+.results{overflow:auto; max-height: 600px;}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="toolbar-content clearfix">
+  <div class="object-tools">
+    <form action="/admin/view/product/download" method="GET">
+      <input type="hidden" name="category" value="{{selected_category_id}}"/>
+      <input type="submit" class="btn btn-warning" value="Export"/>
+    </form>
+  </div>
+
+  <div id="toolbar" class="clearfix">
+    <form id="changelist-search" action="" method="get" class="form-inline">
+      <div class="search-container">
+        <span class="search-filters">
+            <select name="category" data-name="{{selected_category_id}}" class="auto-width" style="max-width: 200px">
+                <option value="">Category filter</option>
+                <option value="">---</option>
+                {{all_category|safe}}
+            </select>
+        </span>
+        <input type="submit" value="Search" class="btn btn-info">
+        &nbsp;
+        <span style="position: relative; top: 5px;">(Total {{total_count}} Products)</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="results">
+  <table id="result_list" class="table table-striped table-bordered table-hover table-condensed table-primary">
+    <thead>
+      <tr>
+        {% for th in table_header %}
+        <th>{{ th }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% load dictionary_extras %}
+      {% for tdr in table_data %}
+      <tr>
+        {% for th in table_header %}
+        <td>{{ tdr|access:th }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

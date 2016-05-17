@@ -1,0 +1,32 @@
+$(document).ready(function(){
+
+
+
+
+$.urlParam = function(name){
+	    var results = new RegExp('[\&]' + name + '=([^&#]*)').exec(window.location.href);
+	    console.log(results);
+	    if (results==null){
+	       return false;
+	    }
+	    else{	
+	       return true;
+	    }
+	}
+
+
+if ($.urlParam('status_exact') || $.urlParam('q'))
+
+{
+
+
+console.log('Its preseent');
+
+}
+
+
+
+
+
+
+}); 

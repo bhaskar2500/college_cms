@@ -1,0 +1,180 @@
+from django.contrib import admin
+from django.contrib.admin import DateFieldListFilter
+from multidbconfig import MultiDBModelAdmin, MultiDBTabularInline
+from import_export import resources
+from import_export.admin import *
+from Orders.models import OrderHeader, OrderLine, Login
+
+
+
+class OrderHeaderResource(resources.ModelResource):
+    class Meta:
+        model = OrderHeader
+
+class OrderHeaderAdmin(ExportMixin, MultiDBModelAdmin):
+	# def custom_status(self, obj):
+	# 	query=OrderLine.objects.using('orders').filter(order_id=obj.order_id)
+
+	# 	l = {
+
+	# 	'processing':0,
+	# 	'payment-pending':0,
+	# 	'exportable':0,
+	# 	'exported':0,
+	# 	'po-created':0,
+	# 	'ready-to-pickup':0,
+	# 	'fullfillment-center':0,
+	# 	'invoice-created':0,
+	# 	'qc-packaging':0,
+	# 	'shipped':0,
+	# 	'delivered':0,
+	# 	'closed':0,
+	# 	'return-request':0,
+	# 	'policy-not-applicable':0,
+	# 	'return-denied':0,
+	# 	'return-accepted':0,
+	# 	'returned':0,
+	# 	'to-be-returned-to-vendor':0,
+	# 	'new-proc-exchange':0,
+	# 	'exchange':0,
+	# 	'refund':0,
+	# 	'closed':0,
+	# 	'order-cancelled':0,
+	# 	'seller-accepted':0,
+	# 	'seller-rejected':0,
+
+	# 	}
+	# 	for each in query:
+	# 		l[each.status] += 1
+
+
+	# 	st = ""
+	# 	for key,value in l.iteritems():
+	# 		if value != 0 : 
+	# 			if  key=="processing":
+	# 				st += str(value) +"P"
+	# 			elif key=="shipped":
+	# 				st += str(value) +"S"
+	# 			elif key=="refund":
+	# 				st += str(value) +"R"
+
+	# 			st += ", "
+	# 	return st
+
+
+		
+
+		
+
+
+			# elif each.status=="":
+			# elif each.status=="": 
+			# elif each.status=="": 
+			# elif each.status=="":  
+			#return each.__dict__
+
+
+
+		# new_obj=None
+		# with open("attributes.pkl","rb") as infile:
+		# 	new_obj=pickle.load(infile)
+		# 	if obj.order_id==new_obj.order_id:
+
+	# def status(self,obj):
+
+	# resource_class = OrderHeaderResource
+	list_display = ('order_id', 
+	'order_number',
+	# 'custom_status',		
+	'status',
+	'payment_type',
+	'total_payable_amount',
+	'billing_name',
+	'billing_email',
+	'shipping_name',
+	'billing_phone',
+	'shipping_phone',
+	'user_phone_no',
+	'user_email',
+	'created_date',)
+
+    	search_fields = ('order_id', 'order_number')
+    	list_filter = (
+			('created_date', DateFieldListFilter),
+			)
+
+    	# readonly_fields = ('custom_status', )
+
+
+admin.site.register(OrderHeader, OrderHeaderAdmin)
+
+
+
+class OrderLineResource(resources.ModelResource):
+	
+
+    class Meta:
+        model = OrderLine
+
+class OrderLineAdmin(ExportMixin, MultiDBModelAdmin):
+	class Media:
+		js=('http://localhost/cadmin/static/js/order_line.js',)
+	# def status(self,obj):
+	# 	query=OrderLine.objects.using('orders').filter(order_id=obj.order_id)
+	# 	for each in query:
+
+        	# with open("attributes.pkl","wb") as outfile:
+        	# 	pickle.dump(query,outfile)
+	class 'seller_status':
+	
+
+        resource_class = OrderLineResource
+        list_display = ('order_id',
+        'order_line_id', 
+	'status',
+	'store_name',
+	'seller_name',
+	'seller_phone',
+	'product_title',
+	'product_qty',
+	'unit_price',
+	'price',
+	'vatrate',
+	'total_vat',
+	'subtotal',
+	'seller_status'
+	)		
+	fields=('status',)
+    	search_fields = ('order_id',)
+    	list_filter = ('store_id', 'status')
+	readonly_field=('seller_status')
+
+
+admin.site.register(OrderLine, OrderLineAdmin)
+
+class LoginResource(resources.ModelResource):
+    class Meta:
+        model = Login
+
+class LoginAdmin(ExportMixin, MultiDBModelAdmin):
+    resource_class = LoginResource
+    list_display = ('username', 'name', 'email', 'registered_at', 'last_login', 'is_verified')
+    search_fields = ('name', 'username','email')
+
+admin.site.register(Login, LoginAdmin)
+
+
+
+#class custom_status(admin.ModelAdmin):
+	#fieldsets=[{'fields':['status','order_id']}]
+	#def order_id(self, obj):
+	#	return obj.order_id
+
+
+
+	# def __init__(self,obj):
+	# 	return obj.status
+
+
+
+

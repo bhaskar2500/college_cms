@@ -1,0 +1,16 @@
+from django.shortcuts import render
+
+
+from Orders.models import OrderLine
+
+
+def move(request):
+	return render(request,"h1.html")
+	# for stat in OrderLine.objects.using('orders').all()[:5]:
+	# 	if stat.status=="Processing":
+	# 		return HttpResp
+
+
+
+
+# Create your views here.

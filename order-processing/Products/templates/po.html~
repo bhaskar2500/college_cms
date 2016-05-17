@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Untitled Document</title>
+
+	<link rel="stylesheet" type="text/css" href="/home/bhaskar/Downloads/trydjango/supplified-cms/default.css" media="print">
+	<body>
+
+		<table cellspacing="0px" width="auto" >
+			<tr>
+				<td width="500px">
+					<img src="../Desktop/Untitled.png" />
+				</td>	
+				<td>
+					<div style="width:auto;">
+					<h3>Manor Kart Retail Private Limited</h3>
+					K-3/40-A ,West Ghonda		
+					Shahdara, New Delhi		
+					Delhi-110053		
+					Contact no :012-3456-7890		
+					Email:manorkartretail@gmail.com		
+					CIN:U74999DL2015PTC283111		
+					
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="width:1400px">
+					<div style="background:Blue; color:#ffffff; text-align:center; display:block; ">
+					PURCHASE ORDER
+					</div>
+<!-- 			{{i|default:0}}
+			{%for each in key%} 
+			
+				{{ i|add:1}}
+			{% endfor %}
+ -->
+				Order Ref. No. : 
+				PO Number:   		<br>
+				PO Date:			<br>
+				PO Valid Till:
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="supplier" >
+						Supplier Details
+					</div>
+			Pincode:				<br>
+			PAN Number:	 			<br>
+			Contact /Mobile No.:	<br>
+			Landline No. 			<br>
+			Email :		
+				</td>
+				<td>
+					<div class="supplier">
+						Billing address
+					</div>
+				</td>
+			</tr>
+
+							
+
+		</table>
+
+	</body>
+
+
+</html>

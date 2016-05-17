@@ -1,0 +1,51 @@
+from django.shortcuts import render_to_response
+from Orders.models import *
+from django.contrib.auth.decorators import login_required
+import json 
+from django.http import HttpResponse
+from Email.email_views import ShootMail
+from django.shortcuts import render
+@login_required
+def change_order_status(request):
+    order_line_id = request.POST['order_line_id'] if 'order_line_id' in request.POST else None
+    order_status = request.POST['order_status'] if 'order_status' in request.POST else None
+
+    try:
+	"""
+	# get user email id and phone number also 
+        orderline = OrderLine.objects.using('orders').get(order_line_id=order_line_id)
+        orderline.status = order_status
+        orderline.save()
+	"""
+	print order_line_id, order_status
+	print 'Email/SMS will be sent to user for this status change ---> do worry neither update not sent'
+        ShootMail(**{
+		'subject': 'This is a dummy subject line',
+		'body': '<p>Hi Tajinder,<p> <br><p>Your order status is %s</p>'%(order_status),
+		'email': 'tajinder.chahal@supplified.com'
+	   }).shoot_email()
+	
+	
+	=
+
+        return HttpResponse(json.dumps({
+                'status_code': 200,
+                'status_msg': 'Success'
+            }))
+    except Exception, e:
+        return HttpResponse(json.dumps({
+	        'status_code': 0,
+	   	'status_msg': 'Error:' + str(e)	    
+	    }))
+
+
+def generate_purchase_order(request):
+    order_header_id = request.POST['order_header_id'] if 'order_header_id' in request.POST else None
+    if not order_header_id:
+        return HttpResponse(json.dumps({
+                'status_code': 0,
+                'status_msg': 'Error: Order header id not provided'
+            }))
+    # order lines for PO generation 
+    OrderLine.objects.filter(order_id=order_header_id, status='Confirmed from Seller').values()
+

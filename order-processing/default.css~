@@ -1,0 +1,19 @@
+
+@media print,screen { 
+table{
+		width:600pt ;
+		height:500pt;
+	}
+
+.supplier
+{
+			width:auto;
+			background:Blue; 
+			color:#ffffff; 
+			text-align:center; 
+			display:block;
+}
+
+}
+
+@page {size:'A2';}

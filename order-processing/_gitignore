@@ -1,0 +1,7 @@
+*.pyc
+
+/static/uploads/*
+/static/upload_product_image/*
+/static/upload_subscribed_product/*
+static/catproductimages/*
+*/migrations/*

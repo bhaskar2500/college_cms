@@ -1,0 +1,8 @@
+sms_dict={Change Password : """Dear <Name (150)> your new password is <Password (15)> Happy Supplifying! """,
+'OTP' : ''' Dear User <Name (150)> is your OTP. Happy Supplifying!''',
+'Order Cancelled ':''' Your Supplified Order No <Order No. (15)> is cancelled. If you have already paid, refund will be initiated shortly. Check emails for more details.''' ,
+'Product Cancelled ':''' Your Supplified Order No <Order No. (15)> Item : <Item Name (100) > is cancelled. If you have already paid, refund will be initiated shortly. Check emails for more details.'''
+"Delivered ": ''' Your shipment with Supplified Order No <Order No. (15)> Item : <Item Name (100)> has been successfully delivered. Thank you for shopping at Supplified.'''
+'Shipped (Pre-paid)' :""" Your Supplified Order No <Order No. (15)> Item : <Item Name (100)> has been shipped and will reach you within 2-3 days."""
+'Shipped (COD)' : """ Your Supplified Order No <Order No. (15)> Item : <Item Name (100)> worth Rs. <Item Price (15)> has been shipped and will reach you within 2-3 days. Please keep your cash ready."""
+'OrderConfirmation' : """Hi, your Supplified order No <Order No. (15)> has been confirmed worth Rs. <Amount (15)>. Items will be shipped within 7 days. Check mails for details. Thank you for shopping at Supplified."""

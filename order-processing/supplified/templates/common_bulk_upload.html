@@ -1,0 +1,314 @@
+{% extends "custom_base.html" %}
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"/></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<script>
+var bar = $('.progress-bar');
+function reset_form() {
+  $('.process_stats').hide().html('');
+  $('.progress').hide();
+  bar.css('width', '0%');
+  $('.action_btns').hide();
+  $('.upload_status, .process_status').addClass('hide').text('');
+  $('#result_list thead, #result_list tbody').html('');
+  $('.action_btns .apply').text('Apply').attr('onclick', 'apply_upload();').
+	addClass('btn-success').removeClass('btn-warning');
+  $('.action_btns .apply_prod').hide().text('Sync with Production');
+  $('.download').hide();
+}
+
+$(document).ready(function() {
+    $('.uploadform input[type="file"]').click(function() {
+        reset_form();
+    });
+    $('select[name="process_type"]').change(function() {
+        reset_form();
+    });
+
+    /*
+    * Function to fire ajax request for uploading the xls file
+    */
+    var bar = $('.progress-bar');
+    $('.uploadform').ajaxForm({
+        beforeSend: function() {
+            $('.process_stats').hide().html('');
+            $('.action_btns').hide();
+            if($('select[name="process_type"]').val() == '') {
+                alert('Select Process Type !');
+                return false;
+            }
+            if(!$('.uploadform input[name="excel_file"]').val()) {
+                alert('File not selected !');
+                return false;
+            }
+            $('.progress').show();
+            $('progress-bar').addClass('active');
+            $('.action_btns').hide();
+            var percentVal = '0%';
+            bar.width(percentVal)
+            $('.uploadform input[type="submit"]').val('Uploading ...');
+            $('.upload_status').removeClass('hide text-danger').addClass('text-info').text('Uploading file ... Please wait');
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var percentVal = percentComplete + '%';
+            bar.width(percentVal)
+        },
+        success: function(data) {
+            var percentVal = '100%';
+            bar.width(percentVal)
+            data = JSON.parse(data);
+            if(data.status_code != 200) {
+		alert('Error:' + data.status_msg);
+		reset_form();
+		return false;
+            }
+            process_file(data.data);
+            $('.progress-bar').removeClass('active');
+            $('.upload_status').removeClass('hide text-danger').addClass('text-success').html('<i class="icon-ok"></i> File Uploaded');
+            $('.uploadform input[type="submit"]').val('Upload');
+        },
+        error: function(data) {
+            bar.width(0);
+            $('.upload_status').removeClass('hide text-success').html('<i class="icon-remove"></i> Error while uploading !').addClass('text-danger');
+            alert('Error while uploading file !');
+            $('.uploadform input[type="submit"]').val('Upload');
+        }
+    });
+});
+
+function create_table(dict) {
+  var table_header = '';
+  var table_body = '';
+  $.each(dict.table_header, function(i, v) {
+    table_header += '<th><div class="text">'+ v +'</div></th>';
+  });
+  $.each(dict.table_data, function(i, v) {
+    table_body += '<tr>';
+    $.each(dict.table_header, function(index, key) {
+      if(key == 'errors') {
+        table_body += '<td class="errors">';
+        $.each(v[key], function(i,z) {
+            console.log(z.text);
+            table_body += z.text;
+        });
+        table_body += '</td>'
+      } else {
+        table_body += '<td>'+ (v[key] || '-' )+'</td>';
+      }
+    });
+    table_body += '</tr>';
+  });
+  console.log(table_body);
+  if(table_body) {
+    $('#result_list thead').html('<tr>' + table_header + '</tr>');
+    $('#result_list tbody').html(table_body);
+  }
+  return {
+    'table_header': table_header,
+    'table_body': table_body
+  }
+}
+/*
+ * Function to fire ajax request for processing the data
+ */
+function process_file(params) {
+    $('.uploadform input[type="file"]').val('');
+    $('.action_btns .apply').data('row_id', params.file_id);
+    $('.process_status').removeClass('hide').html('Processing uploaded file ... Please wait');
+    $.post('/admin/process', params, function(data) {
+      data = JSON.parse(data);
+      if(data.status_code != 200) {
+        alert(data.status_msg);
+        return false;
+      }
+
+      var table_dict = create_table(data.data);
+      var table_header = table_dict['table_header'];
+      var table_body = table_dict['table_body'];
+
+      create_progress_stats(data.data.stats);
+      if(table_body ) {
+        $('.process_status').html('<i class="icon-ok"></i> Processing completed <strong>(Error/s found in the following rows)</strong>').
+            addClass('text-danger').removeClass('text-success');
+      } else {
+        $('.process_status').html('<i class="icon-ok"></i> Processing completed').removeClass('text-danger').addClass('text-success');
+      }
+      $('.process_status').append('<div style="position: relative;top: 7px;left: 3px;">Change log id: '+ data.data.file_id +'</div>');
+      if(!data.data.stats.error) {
+        $('.action_btns').show();
+        $('.action_btns .discard').show()
+      }
+    });
+}
+
+function create_progress_stats(data) {
+  var process_stats = '';
+  if(data.error) {
+    process_stats += '<div style="color: #a94442">'+ data.error + '</div>'
+  }
+  if(data.extra_headers.length) {
+    process_stats += '<div style="color: #E49000;">Extra Headers: '+ (data.extra_headers.join(", ")) +
+        ' <br><span style="color: #626262;font-weight: normal">' +
+        '(* These extra headers and their corresponsing values are ignored.)</span></div>'
+  }
+  if(data.missing_headers && data.missing_headers.length) {
+    process_stats += '<div class="text-info"> Missing headers: ' + (data.missing_headers.join(", ")) + '</div>';
+  }
+  if(data.success_count) {
+    process_stats += '<div style="color:green;">Approved: '+ data.success_count + '</div>'
+  }
+  if(data.error_count) {
+    process_stats += '<div style="color: #a94442">Errors: '+ data.error_count + '</div>'
+  }
+  if(process_stats) {
+    $('.process_stats').html('<h3 style="padding-left:0px;">Processing Stats:</h3>' + process_stats).show();
+  }
+}
+
+function apply_upload() {
+  var x = confirm('Are you sure you want to apply this changes ?');
+  if(!x) { return false; }
+
+  $('.action_btns .apply').text('Applying ... ');
+  $.post('/admin/apply', {'file_id': $('.action_btns .apply').data('row_id')}, function(data) {
+    data = JSON.parse(data);
+    if(data.status_code == 200) {
+        $('.action_btns .apply').text('Applied on Testing').attr('onclick', '').
+            addClass('btn-warning').removeClass('btn-success');
+        $('.action_btns .discard').hide();
+        $('.action_btns .apply_prod').show();
+        if($('select[name="process_type"]').val() == 'create' || $('select[name="process_type"]').val() == 'add') {
+            $('#download_form input[name="file_id"]').val($('.action_btns .apply').data('row_id'));
+            $('.download').show();
+        }
+        alert('Successfully applied !');
+    } else {
+        $('.action_btns .apply').text('Apply on Testing');
+        create_table({
+          'table_header': ['errors'],
+          'table_data': data.errors
+        });
+	    alert('Some query didn\'t get executed !');
+    }
+  });
+}
+
+function discard_upload() {
+  var x = confirm('Are you sure you want to discard this process ?');
+  if(!x) { return false; }
+  $('.action_btns .discard').text('Discarding ... ');
+  $.post('/admin/discard', {'file_id': $('.action_btns .apply').data('row_id')}, function(data) {
+    window.location.reload();
+  });
+}
+
+/*
+ * Function for applying queries on Production server
+ */
+function apply_upload_on_prod() {
+  var x = confirm('Are you sure you want to apply this changes to Productions ?');
+  if(!x) { return false; }
+
+  $('.action_btns .apply_prod').text('Syncing ... ');
+  $.post('/admin/apply_on_production', {
+        'file_id': $('.action_btns .apply').data('row_id')
+    }, function(data) {
+        data = JSON.parse(data);
+        if(data.status_code == 200) {
+            $('.action_btns .apply_prop').text('Synced with Production').attr('onclick', '');
+            $('.action_btns .discard').hide();
+            alert('Successfully Synced with Production !');
+            window.location.reload();
+        } else {
+            $('.action_btns .apply_prod').text('Sync with Production');
+            alert('Error while syncing !');
+        }
+    });
+}
+</script>
+{% endblock %}
+
+{% block cstyle %}
+<style>
+.progress {position: relative;width: 100%;border: 1px solid #ddd;padding: 1px;border-radius: 3px;display: none;}
+.progress {height: 10px;margin-bottom: 0px;margin-top: 20px;overflow: hidden;background-color: #f5f5f5;border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+.progress-bar { float: left;width: 0;height: 100%;font-size: 12px;line-height: 20px;color: #fff;text-align: center;
+    background-color: #337ab7;-webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    -webkit-transition: width .6s ease;-o-transition: width .6s ease;transition: width .6s ease;}
+.bar{background-color: #B4F5B4;width: 0%;height: 20px;border-radius: 3px;}
+.percent {position: absolute;display: inline-block;top: 3px;left: 48%;}
+.table-primary>tbody>tr>td, .table-primary>tbody>tr>th{white-space: nowrap;max-width: 200px;text-overflow: ellipsis;overflow: hidden;}
+.results{overflow:auto; max-height: 400px;}
+.action_btns{display: none;margin-top: -23px;position: relative;top: -12px;}
+.uploadform{border-bottom: 1px solid #d0d0d0;margin-top: 20px; margin-bottom: 10px;padding-bottom: 10px;}
+td.errors{ white-space: normal !important; min-width: 200px;background-color: #FFCCCC !important;}
+.process_stats{padding: 2px 10px 10px;background: #fff;margin: 10px 0px; font-weight: bold; display: none;}
+.text-danger{color: #a94442;}
+.text-success{color: green;}
+.text-warning{color: #E49000;}
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="content-main">
+        <h1>{{ page_header }} Bulk Upload</h1>
+        <div class="row-fluid">
+          <form class="uploadform span12" method="POST" action="{{ action_url }}" enctype="multipart/form-data"/>
+            <div class="span6">
+              <div class="span6">
+              <label> Process Type: </label>
+              <select name="process_type">
+                <option value="">Select process type</option>
+                {% for p in process_type %}
+                <option value="{{p.value}}">{{ p.text}}</option>
+                {% endfor %}
+              </select>
+              </div>
+
+              <div class="span6">
+              <label>Ref. text:</label>
+              <input type="text" name="ref_text" placeholder="Remarks (if any)"/>
+              </div>
+            </div>
+            <div class="span6">
+              <input type="file" name="excel_file" class="pull-left"/>
+              <input type="hidden" name="process_name" value="{{ process_name }}"/>
+              <input type="submit" class="btn btn-sm btn-info" style="margin-left: 30px;" value="Upload" />
+
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                    aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="text-success upload_status hide">File Uploaded</div>
+          <div class="text-danger process_status hide">Process uploaded file ... </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-12 text-right action_btns">
+                <form action="/admin/download_data" id="download_form" method="GET">
+                    <input type="hidden" name="file_id" value=""/>
+                </form>
+                <button onclick="$('#download_form').submit();" class="btn btn-success download" style="display: none; margin-right: 5px;" data-row_id="">Download as Excel</button>
+                <button onclick="apply_upload();" class="btn btn-success apply" data-row_id="">Apply on Testing</button>
+                <button onclick="apply_upload_on_prod();" class="btn btn-success apply_prod" style="display: none;" data-row_id="">Sync with Production</button>
+                <button onclick="discard_upload();" class="btn btn-danger discard" style="margin-left: 25px;">Discard</button>
+            </div>
+            <div class="process_stats">
+            </div>
+            <div class="results col-md-12">
+                <table id="result_list" class="table table-striped table-bordered table-hover table-condensed table-primary">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
